@@ -1,6 +1,10 @@
 Options -Indexes
 RewriteEngine On
 
+# Inoltra l'header Authorization a PHP (Apache + CGI/FPM lo scarta di default)
+SetEnvIfNoCase Authorization "(.+)" HTTP_AUTHORIZATION=$1
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 # Blocca accesso diretto agli include PHP
 RewriteRule ^includes/ - [F,L]
 

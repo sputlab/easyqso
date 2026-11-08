@@ -1,3 +1,7 @@
 RewriteEngine On
+# Inoltra l'header Authorization a PHP (Apache + CGI/FPM lo scarta di default)
+SetEnvIfNoCase Authorization "(.+)" HTTP_AUTHORIZATION=$1
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php [QSA,L]
