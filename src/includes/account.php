@@ -4,6 +4,7 @@
 // ============================================================
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/i18n.php';
 
 // ── Modifica nominativo ──────────────────────────────────────
 function account_change_callsign(int $uid, string $callsign): array {
@@ -12,6 +13,14 @@ function account_change_callsign(int $uid, string $callsign): array {
         return ['ok'=>false,'error'=>'Formato nominativo non valido (2-12 caratteri alfanumerici).'];
     db()->prepare('UPDATE eqso_users SET callsign=? WHERE id=?')->execute([$call,$uid]);
     return ['ok'=>true,'callsign'=>$call];
+}
+
+// ── Lingua interfaccia ───────────────────────────────────────
+function account_change_lang(int $uid, string $lang): array {
+    $l = i18n_valid($lang);
+    if (!$l) return ['ok'=>false,'error'=>'Lingua non valida.'];
+    db()->prepare('UPDATE eqso_users SET lang=? WHERE id=?')->execute([$l,$uid]);
+    return ['ok'=>true,'lang'=>$l];
 }
 
 // ── Cambio password ──────────────────────────────────────────
@@ -47,10 +56,10 @@ function account_request_delete(int $uid, string $qso_action): array {
     $db->prepare('INSERT INTO eqso_account_tokens(user_id,token,action,payload,expires_at)VALUES(?,?,?,?,?)')
        ->execute([$uid,$token,'delete_account',json_encode(['qso_action'=>$qso_action]),$exp]);
     // Recupera email
-    $st = $db->prepare('SELECT email,callsign FROM eqso_users WHERE id=?');
+    $st = $db->prepare('SELECT email,callsign,lang FROM eqso_users WHERE id=?');
     $st->execute([$uid]); $u=$st->fetch();
     if (!$u) return ['ok'=>false,'error'=>'Utente non trovato.'];
-    send_delete_confirmation_email($u['email'],$u['callsign'],$token,$qso_action);
+    send_delete_confirmation_email($u['email'],$u['callsign'],$token,$qso_action,$u['lang']??'it');
     return ['ok'=>true];
 }
 
@@ -100,14 +109,23 @@ function account_revoke_session(int $uid, int $sid): bool {
 }
 
 // ── Email: conferma eliminazione ─────────────────────────────
-function send_delete_confirmation_email(string $to, string $call, string $token, string $qso_action): void {
-    $url   = BASE_URL.'/confirm-delete.php?token='.$token;
-    $label = $qso_action==='delete' ? 'eliminati' : 'anonimizzati';
-    $subj  = 'Conferma eliminazione account — EasyQSO';
-    $body  = "Ciao $call,\n\nHai richiesto l'eliminazione del tuo account EasyQSO.\n"
-           . "I tuoi QSO verranno $label.\n\n"
-           . "Clicca il link per confermare (valido 24 ore):\n$url\n\n"
-           . "Se non hai richiesto nulla, ignora questa email.\n\nEasyQSO Team";
+function send_delete_confirmation_email(string $to, string $call, string $token, string $qso_action, string $lang = 'it'): void {
+    $url   = BASE_URL.'/confirm-delete.php?token='.$token.'&lang='.($lang==='en'?'en':'it');
+    if ($lang === 'en') {
+        $label = $qso_action==='delete' ? 'deleted' : 'anonymised';
+        $subj  = 'Confirm account deletion — EasyQSO';
+        $body  = "Hi $call,\n\nYou requested the deletion of your EasyQSO account.\n"
+               . "Your QSOs will be $label.\n\n"
+               . "Click the link to confirm (valid for 24 hours):\n$url\n\n"
+               . "If you did not request this, ignore this email.\n\nEasyQSO Team";
+    } else {
+        $label = $qso_action==='delete' ? 'eliminati' : 'anonimizzati';
+        $subj  = 'Conferma eliminazione account — EasyQSO';
+        $body  = "Ciao $call,\n\nHai richiesto l'eliminazione del tuo account EasyQSO.\n"
+               . "I tuoi QSO verranno $label.\n\n"
+               . "Clicca il link per confermare (valido 24 ore):\n$url\n\n"
+               . "Se non hai richiesto nulla, ignora questa email.\n\nEasyQSO Team";
+    }
     $hdr = "From: ".MAIL_FROM_NAME." <".MAIL_FROM.">\r\nContent-Type: text/plain; charset=UTF-8";
     mail($to,$subj,$body,$hdr);
 }

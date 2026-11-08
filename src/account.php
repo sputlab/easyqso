@@ -1,6 +1,6 @@
-<?php require_once __DIR__.'/includes/config.php'; ?>
+<?php require_once __DIR__.'/includes/config.php'; require_once __DIR__.'/includes/i18n.php'; ?>
 <!DOCTYPE html>
-<html lang="it">
+<html lang="<?= i18n_lang() ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -23,8 +23,8 @@ h2{font-family:'Barlow Condensed',sans-serif;font-size:18px;letter-spacing:2px;c
 @media(max-width:520px){.row{grid-template-columns:1fr}}
 .fl{display:flex;flex-direction:column;gap:3px;margin-bottom:14px}
 label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txm);letter-spacing:1px;text-transform:uppercase}
-input[type=text],input[type=password]{background:var(--bg);border:1px solid var(--br2);color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:14px;padding:9px 11px;border-radius:4px;outline:none;width:100%}
-input:focus{border-color:var(--acd)}
+select,input[type=text],input[type=password]{background:var(--bg);border:1px solid var(--br2);color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:14px;padding:9px 11px;border-radius:4px;outline:none;width:100%}
+input:focus,select:focus{border-color:var(--acd)}
 input[readonly]{opacity:.65}
 .hint{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txm)}
 .btn{background:var(--ac);color:var(--bg);border:none;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;padding:10px 20px;border-radius:4px;cursor:pointer}
@@ -70,6 +70,13 @@ input[readonly]{opacity:.65}
   </div>
 
   <div class="card">
+   <h2>Lingua</h2>
+   <div class="msg" id="m-lang"></div>
+   <div class="fl"><label for="lang">Lingua dell'interfaccia</label>
+    <select id="lang"><option value="it" data-notr>Italiano</option><option value="en" data-notr>English</option></select></div>
+  </div>
+
+  <div class="card">
    <h2>Sicurezza</h2>
    <div class="msg" id="m-pw"></div>
    <div class="fl"><label for="oldpw">Password attuale</label><input type="password" id="oldpw" autocomplete="current-password"></div>
@@ -90,7 +97,7 @@ input[readonly]{opacity:.65}
   <div class="card danger-zone">
    <h2>Elimina account</h2>
    <div class="msg" id="m-del"></div>
-   <p>Azione <strong>irreversibile</strong>. Riceverai un'email con un link di conferma valido 24 ore.</p>
+   <p>Azione irreversibile. Riceverai un'email con un link di conferma valido 24 ore.</p>
    <div class="fl radios">
     <label><input type="radio" name="qa" value="anonymize" checked> Anonimizza i QSO (nominativo → "DELETED")</label>
     <label><input type="radio" name="qa" value="delete"> Elimina tutti i QSO</label>
@@ -100,6 +107,7 @@ input[readonly]{opacity:.65}
  </div>
 </div>
 
+<?= i18n_client_script() ?>
 <script>
 const API='<?= BASE_URL ?>/api';
 let token=null;
@@ -120,6 +128,8 @@ async function api(path,opts={}){
 async function load(){
   const [s,st,me]=await Promise.all([api('/user/settings'),api('/user/stats'),api('/auth/me')]);
   if(!s.ok)return;
+  if(s.settings.lang)I18N.set(s.settings.lang);
+  $('lang').value=I18N.lang;
   $('callsign').value=s.settings.callsign;$('email').value=s.settings.email;
   if(st.ok)$('qsos').value=st.stats.total+' QSO';
   if(me.ok){$('created').value=(me.user.created_at||'').slice(0,10);$('lastlogin').value=(me.user.last_login||'Mai').slice(0,16)}
@@ -133,6 +143,13 @@ async function loadSessions(){
   el.querySelectorAll('.rev').forEach(b=>b.onclick=async()=>{const r=await api('/user/session/'+b.dataset.sid,{method:'DELETE'});if(r.ok)loadSessions();else say('m-sess',r.error||'Errore.')});
 }
 
+$('lang').onchange=async()=>{
+  const l=$('lang').value;
+  const d=await api('/user/settings',{method:'POST',body:JSON.stringify({lang:l})});
+  if(!d.ok)return say('m-lang',d.error||'Errore.');
+  I18N.set(l);
+  say('m-lang','Lingua aggiornata.',true);
+};
 $('btn-call').onclick=async()=>{
   const call=$('callsign').value.trim().toUpperCase();
   const d=await api('/user/callsign',{method:'PUT',body:JSON.stringify({callsign:call})});

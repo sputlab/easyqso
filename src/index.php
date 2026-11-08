@@ -1,4 +1,4 @@
-<?php require_once __DIR__.'/includes/config.php'; ?>
+<?php require_once __DIR__.'/includes/config.php'; require_once __DIR__.'/includes/i18n.php'; ?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -131,7 +131,8 @@ a{color:var(--ac)}
 .bp{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.5px;padding:3px 8px;border-radius:3px;border:1px solid var(--br2);color:var(--txm);background:transparent;cursor:pointer;transition:all .15s}
 .bp:hover{border-color:var(--txd);color:var(--txd)}
 .bp.active{border-color:var(--acd);color:var(--ac);background:color-mix(in srgb,var(--ac) 8%,transparent)}
-.btn-exp{margin-left:auto;background:transparent;border:1px solid var(--br2);color:var(--txd);font-family:'Share Tech Mono',monospace;font-size:11px;padding:5px 12px;border-radius:4px;cursor:pointer;transition:all .15s}
+.btn-exp{margin-left:0;background:transparent;border:1px solid var(--br2);color:var(--txd);font-family:'Share Tech Mono',monospace;font-size:11px;padding:5px 12px;border-radius:4px;cursor:pointer;transition:all .15s}
+.exp-group{margin-left:auto;display:flex;gap:6px}
 .btn-exp:hover{border-color:var(--ac2);color:var(--ac2)}
 /* TABLE */
 .log-wrap{overflow-x:auto;flex:1;min-height:150px}
@@ -220,6 +221,7 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
 .pfield{display:flex;flex-direction:column;gap:4px}
 .pfield label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txm);letter-spacing:1px;text-transform:uppercase}
 .pfield input,.pfield select{background:var(--bg);border:1px solid var(--br2);color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:13px;padding:8px 10px;border-radius:4px;outline:none;transition:border-color .15s;-webkit-appearance:none}
+.pfield input[type=checkbox],.pfield input[type=radio]{-webkit-appearance:auto;appearance:auto;width:auto;padding:0;margin:0}
 .pfield input:focus{border-color:var(--acd)}.pfield input::placeholder{color:var(--txm)}.pfield input[readonly]{color:var(--txd);cursor:default}
 .psec-title{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txm);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--br)}
 .panel-msg{font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px 12px;border-radius:4px;margin-bottom:12px;display:none}
@@ -299,6 +301,11 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
 .footer{background:var(--su);border-top:1px solid var(--br2);padding:10px 16px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txm);flex-shrink:0}
 .footer a{color:var(--txd)}.footer a:hover{color:var(--ac)}
 /* TOAST */
+.lang-sw{position:absolute;top:14px;right:14px;display:flex;gap:4px}
+.lang-sw button{background:transparent;border:1px solid var(--br2);color:var(--txm);font-family:'Share Tech Mono',monospace;font-size:10px;padding:2px 7px;border-radius:3px;cursor:pointer}
+.lang-sw button.active{color:var(--ac);border-color:var(--ac)}
+.auth-card{position:relative}
+.guide-sec{margin-bottom:14px}.guide-sec h4{font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;color:var(--ac);font-size:15px;margin-bottom:4px}.guide-sec p,.guide-sec li{font-size:13px;color:var(--txd);line-height:1.5}.guide-sec ul{padding-left:18px}
 .toast{position:fixed;bottom:20px;right:20px;background:var(--ac);color:var(--bg);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;padding:10px 20px;border-radius:4px;opacity:0;transform:translateY(10px);transition:all .2s;pointer-events:none;z-index:999}
 .toast.show{opacity:1;transform:translateY(0)}.toast.err{background:var(--red);color:#fff}
 @media(max-width:900px){.form-grid{grid-template-columns:repeat(6,1fr)}.field.fc{grid-column:span 3}.field.fd{grid-column:span 2}.field.ft{grid-column:span 2}.header{grid-template-columns:auto 1fr auto}.header-center{justify-self:center}.cluster-panel{width:90vw}.tools-grid{grid-template-columns:1fr 1fr}}
@@ -311,6 +318,7 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
  <div class="auth-card">
   <div class="auth-logo">EasyQSO</div>
   <div class="auth-sub">DX CONTEST LOGGER v<?= APP_VERSION ?></div>
+  <div class="lang-sw" data-notr><button data-lang-sel="it" onclick="I18N.set('it')">IT</button><button data-lang-sel="en" onclick="I18N.set('en')">EN</button></div>
   <div class="auth-tabs">
    <button class="auth-tab active" onclick="authTab('login')">Accedi</button>
    <button class="auth-tab" onclick="authTab('register')">Registrati</button>
@@ -370,6 +378,7 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
    <button class="menu-btn" onclick="openTools('import')"><span>📥</span> Importa ADIF</button>
    <button class="menu-btn" onclick="openTools()"><span>🛠️</span> Tutti gli strumenti</button>
    <div class="menu-sep">Info</div>
+   <button class="menu-btn" onclick="openOv('ov-guide');closeBurger()"><span>📖</span> Guida</button>
    <button class="menu-btn" onclick="openOv('ov-about');closeBurger()"><span>ℹ️</span> About</button>
    <button class="menu-btn" onclick="openOv('ov-changelog');closeBurger()"><span>📋</span> Changelog</button>
    <button class="menu-btn" onclick="reportBug();closeBurger()"><span>🐛</span> Segnala bug</button>
@@ -385,8 +394,9 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
  <div><span class="clabel">Molt. DXCC</span><div class="contest-score" id="contest-mults" style="color:var(--ac4)">0</div></div>
  <div><span class="clabel">Score totale</span><div class="contest-score" id="contest-total" style="color:var(--ac2)">0</div></div>
  <div style="margin-left:auto;display:flex;gap:8px">
-  <button class="pbtn ghost sm" onclick="resetContest()" style="color:var(--red)">↺ Reset</button>
-  <button class="pbtn ghost sm" onclick="toggleContest()">✕</button>
+  <button class="pbtn ghost sm" onclick="resetContest()">↺ Reset</button>
+  <button class="pbtn ghost sm" onclick="cancelContest()" style="color:var(--red)" id="contest-cancel-btn">⏹ Annulla contest</button>
+  <button class="pbtn ghost sm" onclick="toggleContest()" title="Nascondi barra">✕</button>
  </div>
 </div>
 
@@ -458,8 +468,7 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
   <button class="bp" data-band="10m" onclick="setBand(this)">10m</button>
   <button class="bp" data-band="6m" onclick="setBand(this)">6m</button>
  </div>
- <button class="btn-exp" onclick="exportADIF()">⬇ ADIF</button>
- <button class="btn-exp" onclick="exportCSV()">⬇ CSV</button>
+ <div class="exp-group"><button class="btn-exp" onclick="exportADIF()">⬇ ADIF</button><button class="btn-exp" onclick="exportCSV()">⬇ CSV</button></div>
 </div>
 
 <!-- LOG TABLE -->
@@ -473,7 +482,7 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
    <th onclick="sortBy('rst_rcvd')">RST RX</th><th>Nr TX/RX</th>
    <th onclick="sortBy('dxcc')">DXCC</th><th>Note</th><th style="width:80px"></th>
   </tr></thead>
-  <tbody id="log-body"></tbody>
+  <tbody id="log-body" data-notr></tbody>
  </table>
  <div class="empty" id="empty-state"><div>📻</div>Nessun QSO registrato.<br>Inserisci il primo contatto sopra.</div>
 </div>
@@ -500,51 +509,6 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
  </div>
  <div class="cluster-list" id="cluster-list"><div style="padding:20px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txm)">Caricamento…</div></div>
  <div class="cluster-footer"><span id="cluster-ts">—</span><button onclick="fetchCluster()" style="background:transparent;border:none;color:var(--txd);cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:10px">↻</button></div>
-</div>
-
-<!-- ══ PANEL: ACCOUNT ══ -->
-<div class="panel-overlay" id="panel-account">
- <div class="panel-wrap">
-  <div class="panel-head"><span style="font-size:20px">👤</span><div class="panel-title">Account</div><button class="panel-close" onclick="closePanel('panel-account')">✕</button></div>
-  <div class="panel-body">
-   <div class="panel-tabs">
-    <button class="ptab active" onclick="switchPTab('acc',0,this)">Profilo</button>
-    <button class="ptab" onclick="switchPTab('acc',1,this)">Sicurezza</button>
-    <button class="ptab" onclick="switchPTab('acc',2,this)">Elimina Account</button>
-   </div>
-   <div class="ptab-pane active" id="acc-pane-0">
-    <div class="panel-msg" id="acc-msg-0"></div>
-    <div class="prow"><div class="pfield"><label>Nominativo</label><input type="text" id="acc-callsign" maxlength="12"><div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txm);margin-top:2px">2–12 caratteri alfanumerici</div></div><div class="pfield"><label>Email</label><input type="text" id="acc-email" readonly></div></div>
-    <div class="prow"><div class="pfield"><label>Membro dal</label><input type="text" id="acc-created" readonly></div><div class="pfield"><label>Ultimo accesso</label><input type="text" id="acc-lastlogin" readonly></div></div>
-    <div class="prow"><div class="pfield"><label>QSO registrati</label><input type="text" id="acc-qso-count" readonly></div></div>
-    <button class="pbtn" onclick="accSaveCallsign()">SALVA NOMINATIVO</button>
-   </div>
-   <div class="ptab-pane" id="acc-pane-1">
-    <div class="panel-msg" id="acc-msg-1"></div>
-    <div class="psec-title">Cambia password</div>
-    <div class="prow full"><div class="pfield"><label>Password attuale</label><input type="password" id="acc-old-pw" placeholder="Password corrente"></div></div>
-    <div class="prow"><div class="pfield"><label>Nuova password</label><input type="password" id="acc-new-pw" placeholder="Min 8 car., 1 maiusc., 1 numero"></div><div class="pfield"><label>Conferma</label><input type="password" id="acc-new-pw2" placeholder="Ripeti"></div></div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><input type="checkbox" id="acc-logout-others" style="accent-color:var(--ac)"><label for="acc-logout-others" style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txd);cursor:pointer">Disconnetti le altre sessioni attive</label></div>
-    <button class="pbtn" onclick="accChangePassword()" style="margin-bottom:24px">AGGIORNA PASSWORD</button>
-    <div class="psec-title">Sessioni attive</div>
-    <div class="sess-list" id="sess-list"><div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txm)">Caricamento…</div></div>
-    <button class="pbtn ghost sm" onclick="loadSessions()">↻ Aggiorna</button>
-   </div>
-   <div class="ptab-pane" id="acc-pane-2">
-    <div class="panel-msg" id="acc-msg-2"></div>
-    <div class="danger-zone">
-     <h4>⚠️ Zona Pericolo</h4>
-     <p>L'eliminazione è <strong>irreversibile</strong>. Riceverai un'email con link valido 24 ore.</p>
-     <div class="psec-title" style="margin-top:4px">Cosa fare con i tuoi QSO?</div>
-     <div class="radio-group">
-      <label class="radio-opt"><input type="radio" name="qso-action" value="anonymize" checked><span><strong>Anonimizza i QSO</strong>Nominativo → "DELETED"</span></label>
-      <label class="radio-opt"><input type="radio" name="qso-action" value="delete"><span><strong>Elimina tutti i QSO</strong>Cancellazione definitiva</span></label>
-     </div>
-     <button class="pbtn danger" onclick="accRequestDelete()">RICHIEDI ELIMINAZIONE ACCOUNT</button>
-    </div>
-   </div>
-  </div>
- </div>
 </div>
 
 <!-- ══ PANEL: GESTIONE UTENTI ══ -->
@@ -691,6 +655,32 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
  </div>
 </div>
 
+<!-- ══ MODAL: GUIDA ══ -->
+<div class="ov" id="ov-guide" onclick="ovClick(event,'ov-guide')">
+ <div class="modal" style="max-width:560px">
+  <button class="mc" onclick="closeOv('ov-guide')">✕</button>
+  <div class="mt" style="font-size:22px;margin-bottom:14px">📖 Guida rapida</div>
+  <div data-lang-block="it">
+   <div class="guide-sec"><h4>1 · Registrare un QSO</h4><p>Scrivi il nominativo (DXCC e dupe alert compaiono da soli), inserisci la frequenza: la banda viene rilevata automaticamente. Premi <b>Invio</b> o <b>+ LOG QSO</b>. Con “Ora auto” l'ora UTC si aggiorna da sola, con “Freq fissa” l'ultima frequenza resta nel campo.</p></div>
+   <div class="guide-sec"><h4>2 · Log, filtri ed export</h4><ul><li>Clicca sulle intestazioni per ordinare; ✏️ modifica un QSO in riga, 🗑 lo elimina.</li><li>Filtra per nominativo e per banda (pillole sopra la tabella).</li><li>In alto a destra della tabella: <b>⬇ ADIF</b> e <b>⬇ CSV</b>.</li></ul></div>
+   <div class="guide-sec"><h4>3 · Modalità contest</h4><p><b>🏆 CONTEST</b> avvia timer e score live (punti × moltiplicatori DXCC). <b>↺ Reset</b> riparte da zero, <b>✕</b> nasconde la barra, <b>⏹ Annulla contest</b> ferma e azzera il timer (i QSO restano nel log).</p></div>
+   <div class="guide-sec"><h4>4 · Strumenti</h4><p>Dal menu ☰: import ADIF, export Cabrillo, mappa DXCC, statistiche, backup automatico e notifiche. Il pulsante <b>📡 DX CLUSTER</b> apre lo spot live: un clic su uno spot precompila il form.</p></div>
+   <div class="guide-sec"><h4>5 · Account e lingua</h4><p>Menu ☰ → <b>Il mio account</b>: cambia nominativo, password, lingua dell'interfaccia (Italiano/English), gestisci le sessioni o elimina l'account.</p></div>
+   <div class="guide-sec"><h4>6 · Amministratori</h4><p>Gli admin vedono <b>Gestione Utenti</b>: creazione utenti (anche con ruolo Admin), sospensione, reset password, audit log.</p></div>
+  </div>
+  <div data-lang-block="en" style="display:none">
+   <div class="guide-sec"><h4>1 · Logging a QSO</h4><p>Type the callsign (DXCC and dupe alert show up on their own), enter the frequency: the band is detected automatically. Press <b>Enter</b> or <b>+ LOG QSO</b>. With “Auto time” the UTC time updates itself, with “Fixed freq” the last frequency stays in the field.</p></div>
+   <div class="guide-sec"><h4>2 · Log, filters and export</h4><ul><li>Click the headers to sort; ✏️ edits a QSO inline, 🗑 deletes it.</li><li>Filter by callsign and band (pills above the table).</li><li>Top right of the table: <b>⬇ ADIF</b> and <b>⬇ CSV</b>.</li></ul></div>
+   <div class="guide-sec"><h4>3 · Contest mode</h4><p><b>🏆 CONTEST</b> starts the timer and live score (points × DXCC multipliers). <b>↺ Reset</b> restarts from zero, <b>✕</b> hides the bar, <b>⏹ Cancel contest</b> stops and resets the timer (QSOs stay in the log).</p></div>
+   <div class="guide-sec"><h4>4 · Tools</h4><p>From the ☰ menu: ADIF import, Cabrillo export, DXCC map, statistics, automatic backup and notifications. The <b>📡 DX CLUSTER</b> button opens the live spots: click a spot to prefill the form.</p></div>
+   <div class="guide-sec"><h4>5 · Account and language</h4><p>☰ menu → <b>My account</b>: change callsign, password, interface language (Italiano/English), manage sessions or delete the account.</p></div>
+   <div class="guide-sec"><h4>6 · Administrators</h4><p>Admins see <b>User management</b>: create users (optionally as Admin), suspend, reset password, audit log.</p></div>
+  </div>
+  <hr class="mdiv">
+  <div class="ma"><a class="mb p" href="guide.html" target="_blank">Apri la guida completa con screenshot →</a></div>
+ </div>
+</div>
+
 <!-- ══ MODAL: ABOUT ══ -->
 <div class="ov" id="ov-about" onclick="ovClick(event,'ov-about')">
  <div class="modal">
@@ -706,7 +696,7 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
    <li>📊 Statistiche e grafici per ora/banda/modo</li><li>🗺️ Mappa DXCC interattiva</li>
    <li>📡 DX Cluster live con prefill form</li><li>🏆 Modalità contest con score live</li>
    <li>💾 Backup ADIF automatico</li><li>📥 Import ADIF</li><li>⬇ Export ADIF, CSV, Cabrillo</li>
-   <li>🔔 Notifiche desktop</li><li>🔍 Lookup QRZ.com one-click</li><li>🎨 3 temi grafici</li>
+   <li>🔔 Notifiche desktop</li><li>🔍 Lookup QRZ.com one-click</li><li>🎨 3 temi grafici</li><li>🌐 Italiano / English</li><li>📖 Guida integrata</li>
   </ul>
   <hr class="mdiv">
   <div class="ma">
@@ -723,7 +713,10 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
  <div class="modal">
   <button class="mc" onclick="closeOv('ov-changelog')">✕</button>
   <div class="mt" style="font-size:22px;margin-bottom:16px">Changelog</div>
-  <div class="cle"><div class="clv">v2.1.2 — corrente</div><div class="cld">Novembre 2026</div>
+  <div class="cle"><div class="clv">v2.2.0 — corrente</div><div class="cld">Novembre 2026</div>
+   <ul class="cll"><li>🌐 Interfaccia in italiano e inglese, lingua impostabile dalla pagina account</li><li>📖 Guida integrata nel menu e guida illustrata in HTML con screenshot</li><li>⏹ Pulsante “Annulla contest” per fermare e azzerare il timer</li><li>👥 Flag Admin visibile nella creazione utente</li><li>⬇ Pulsanti ADIF e CSV affiancati a destra</li><li>🧹 Rimosso il vecchio pannello Account (sostituito dalla pagina dedicata)</li></ul></div>
+  <hr class="mdiv">
+  <div class="cle"><div class="clv">v2.1.2</div><div class="cld">Novembre 2026</div>
    <ul class="cll"><li>🐛 Corretti i file .htaccess di api/ e includes/ che causavano errore 500 al login</li></ul></div>
   <hr class="mdiv">
   <div class="cle"><div class="clv">v2.1.1</div><div class="cld">Novembre 2026</div>
@@ -762,7 +755,7 @@ function toast(msg,err=false){const t=document.getElementById('toast');t.textCon
 function openOv(id){document.getElementById(id).classList.add('open')}
 function closeOv(id){document.getElementById(id).classList.remove('open')}
 function ovClick(e,id){if(e.target===document.getElementById(id))closeOv(id)}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));closeBurger();closePanel('panel-account');closePanel('panel-users')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));closeBurger();closePanel('panel-users')}});
 function reportBug(){window.location.href='mailto:bug@sputlab.com?subject=Segnalazione%20bug%20WebApp%20EasyQSO'}
 
 // ── Theme ────────────────────────────────────────────────────
@@ -816,7 +809,7 @@ async function doRegister(){
   const pass=document.getElementById('r-pass').value;
   const pass2=document.getElementById('r-pass2').value;
   if(!call||!email||!pass){showMsg('msg-reg','Compila tutti i campi.');return}
-  const d=await apiFetch('/auth/register',{method:'POST',body:JSON.stringify({callsign:call,email,password:pass,password2:pass2})});
+  const d=await apiFetch('/auth/register',{method:'POST',body:JSON.stringify({callsign:call,email,password:pass,password2:pass2,lang:I18N.lang})});
   if(!d.ok){showMsg('msg-reg',d.error||'Errore.');return}
   showMsg('msg-reg',d.message||'Registrazione completata!',true);
 }
@@ -827,7 +820,7 @@ async function doReset(){
   showMsg('msg-reset',d.message||'Operazione completata.',true);
 }
 async function doLogout(){
-  closePanel('panel-account');closePanel('panel-users');
+  closePanel('panel-users');
   if(token)await apiFetch('/auth/logout',{method:'POST'});
   token=null;currentUser=null;log=[];
   localStorage.removeItem('easyqso_token');
@@ -843,6 +836,7 @@ async function bootApp(){
   document.getElementById('user-badge').textContent='👤 '+currentUser.callsign;
   document.getElementById('menu-users-item').style.display=currentUser.is_admin?'block':'none';
   if(currentUser.theme)setTheme(currentUser.theme);
+  if(currentUser.lang)I18N.set(currentUser.lang);
   document.getElementById('opt-at').checked=!!+currentUser.opt_autotime;
   document.getElementById('opt-kf').checked=!!+currentUser.opt_keepfreq;
   await loadDXCC();
@@ -991,53 +985,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.activeEleme
 function openPanel(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden'}
 function closePanel(id){document.getElementById(id).classList.remove('open');document.body.style.overflow=''}
 function switchPTab(prefix,idx,btn){
-  const base=prefix==='acc'?'panel-account':'panel-users';
+  const base='panel-users';
   document.querySelectorAll('#'+base+' .ptab-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
   document.querySelectorAll('#'+base+' .ptab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
 }
 function showPanelMsg(id,msg,ok=false){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.className='panel-msg show '+(ok?'ok':'err');setTimeout(()=>el.className='panel-msg',4000)}
-
-async function openAccount(){
-  closeBurger();
-  const[s,stats,me]=await Promise.all([apiFetch('/user/settings'),apiFetch('/user/stats'),apiFetch('/auth/me')]);
-  if(s.ok){document.getElementById('acc-callsign').value=s.settings.callsign;document.getElementById('acc-email').value=s.settings.email}
-  if(stats.ok)document.getElementById('acc-qso-count').value=stats.stats.total+' QSO';
-  if(me.ok){document.getElementById('acc-created').value=(me.user.created_at||'').slice(0,10);document.getElementById('acc-lastlogin').value=(me.user.last_login||'Mai').slice(0,16)}
-  openPanel('panel-account');loadSessions();
-}
-async function accSaveCallsign(){
-  const call=document.getElementById('acc-callsign').value.trim().toUpperCase();
-  const d=await apiFetch('/user/callsign',{method:'PUT',body:JSON.stringify({callsign:call})});
-  if(!d.ok){showPanelMsg('acc-msg-0',d.error||'Errore.');return}
-  currentUser.callsign=d.callsign;document.getElementById('user-badge').textContent='👤 '+d.callsign;
-  showPanelMsg('acc-msg-0','Nominativo aggiornato: '+d.callsign,true);
-}
-async function accChangePassword(){
-  const old=document.getElementById('acc-old-pw').value;
-  const pw=document.getElementById('acc-new-pw').value;
-  const pw2=document.getElementById('acc-new-pw2').value;
-  const lo=document.getElementById('acc-logout-others').checked;
-  if(!old||!pw||!pw2){showPanelMsg('acc-msg-1','Compila tutti i campi.');return}
-  if(pw!==pw2){showPanelMsg('acc-msg-1','Le password non coincidono.');return}
-  const d=await apiFetch('/user/change-password',{method:'POST',body:JSON.stringify({old_password:old,new_password:pw,new_password2:pw2,logout_others:lo})});
-  if(!d.ok){showPanelMsg('acc-msg-1',d.error||'Errore.');return}
-  document.getElementById('acc-old-pw').value='';document.getElementById('acc-new-pw').value='';document.getElementById('acc-new-pw2').value='';
-  showPanelMsg('acc-msg-1','Password aggiornata!',true);if(lo)loadSessions();
-}
-async function loadSessions(){
-  const d=await apiFetch('/user/sessions');const el=document.getElementById('sess-list');
-  if(!d.ok||!d.sessions.length){el.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--txm)">Nessuna sessione attiva.</div>';return}
-  el.innerHTML=d.sessions.map(s=>`<div class="sess-item">${s.current?'<span class="badge-cur">CORRENTE</span>':''}<span>${s.created_at.slice(0,16)}</span><span style="margin-left:auto;color:var(--txm)">scade ${s.expires_at.slice(0,10)}</span>${!s.current?`<span class="revoke" onclick="revokeSession(${s.id})">✕ Revoca</span>`:''}</div>`).join('');
-}
-async function revokeSession(sid){const d=await apiFetch('/user/session/'+sid,{method:'DELETE'});if(d.ok)loadSessions();else showPanelMsg('acc-msg-1',d.error||'Errore.')}
-async function accRequestDelete(){
-  const qa=document.querySelector('input[name="qso-action"]:checked')?.value||'anonymize';
-  if(!confirm(`Sei sicuro? Riceverai un'email di conferma.\nI QSO saranno: ${qa==='delete'?'ELIMINATI':'ANONIMIZZATI'}`))return;
-  const d=await apiFetch('/user/request-delete',{method:'POST',body:JSON.stringify({qso_action:qa})});
-  if(!d.ok){showPanelMsg('acc-msg-2',d.error||'Errore.');return}
-  showPanelMsg('acc-msg-2','Email inviata! Controlla la casella entro 24 ore.',true);
-}
 
 // ════════════════════════════════════════════════════════════
 //  USER MANAGEMENT (admin)
@@ -1128,7 +1081,7 @@ function qrzLookup(){const call=document.getElementById('f-call').value.trim().t
 let notifEnabled=localStorage.getItem('easyqso_notif')==='1';
 function updateNotifUI(){const badge=document.getElementById('notif-badge');const btn=document.getElementById('notif-btn');const wrap=document.getElementById('notif-test-wrap');if(!badge)return;const perm=Notification.permission;if(perm==='granted'&&notifEnabled){badge.textContent='Attive';badge.className='notif-badge notif-on';if(btn)btn.textContent='Disattiva';if(wrap)wrap.style.display='block'}else{badge.textContent=perm==='denied'?'Bloccate dal browser':'Non attive';badge.className='notif-badge notif-off';if(btn)btn.textContent=perm==='denied'?'Permesso negato':'Attiva notifiche';if(wrap)wrap.style.display='none'}}
 async function requestNotifPermission(){if(!('Notification'in window)){alert('Notifiche non supportate.');return}if(Notification.permission==='granted'&&notifEnabled){notifEnabled=false;localStorage.setItem('easyqso_notif','0');updateNotifUI();return}if(Notification.permission!=='denied'){const p=await Notification.requestPermission();if(p==='granted'){notifEnabled=true;localStorage.setItem('easyqso_notif','1')}}updateNotifUI()}
-function sendQsoNotif(call,band,mode){if(!notifEnabled||Notification.permission!=='granted')return;try{new Notification('QSO loggato — EasyQSO',{body:`${call} • ${band} • ${mode}`,icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📻</text></svg>',tag:'easyqso-qso'})}catch(e){}}
+function sendQsoNotif(call,band,mode){if(!notifEnabled||Notification.permission!=='granted')return;try{new Notification(T('QSO loggato — EasyQSO'),{body:`${call} • ${band} • ${mode}`,icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📻</text></svg>',tag:'easyqso-qso'})}catch(e){}}
 function testNotif(){sendQsoNotif('IK1TEST','20m','SSB')}
 
 // ════════════════════════════════════════════════════════════
@@ -1144,16 +1097,25 @@ function checkAutoBackup(){if(!autoBackupEnabled)return;const when=document.quer
 // ════════════════════════════════════════════════════════════
 let contestActive=false,contestStart=null,contestTimer=null;
 function toggleContest(){contestActive=!contestActive;const bar=document.getElementById('contest-bar');const btn=document.getElementById('contest-toggle-btn');if(contestActive){if(!contestStart)contestStart=Date.now();bar.classList.add('active');if(btn)btn.classList.add('on');contestTimer=setInterval(updateContestTimer,1000);updateContestScore()}else{bar.classList.remove('active');if(btn)btn.classList.remove('on');clearInterval(contestTimer)}}
+function cancelContest(){
+  if(!confirm('Annullare il contest? Il timer verrà fermato e azzerato. I QSO nel log non vengono toccati.'))return;
+  contestActive=false;clearInterval(contestTimer);contestTimer=null;contestStart=null;
+  document.getElementById('contest-bar').classList.remove('active');
+  const btn=document.getElementById('contest-toggle-btn');if(btn)btn.classList.remove('on');
+  document.getElementById('contest-timer').textContent='00:00:00';
+  ['contest-pts','contest-mults','contest-total'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='0'});
+  toast('Contest annullato.');
+}
 function resetContest(){contestStart=Date.now();updateContestTimer();updateContestScore()}
 function updateContestTimer(){if(!contestStart)return;const el=document.getElementById('contest-timer');if(!el)return;const diff=Math.floor((Date.now()-contestStart)/1000);el.textContent=pad(Math.floor(diff/3600))+':'+pad(Math.floor((diff%3600)/60))+':'+pad(diff%60)}
-function updateContestScore(){if(!contestActive)return;let pts=0;const mults=new Set();log.forEach(q=>{pts+=(['15m','10m','6m'].includes(q.band)?3:['20m','40m','80m'].includes(q.band)?2:1);if(q.dxcc)mults.add(q.dxcc)});const total=pts*(mults.size||1);['contest-pts','contest-mults','contest-total'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=[pts,mults.size,total.toLocaleString('it-IT')][i]})}
+function updateContestScore(){if(!contestActive)return;let pts=0;const mults=new Set();log.forEach(q=>{pts+=(['15m','10m','6m'].includes(q.band)?3:['20m','40m','80m'].includes(q.band)?2:1);if(q.dxcc)mults.add(q.dxcc)});const total=pts*(mults.size||1);['contest-pts','contest-mults','contest-total'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=[pts,mults.size,total.toLocaleString(I18N.locale())][i]})}
 
 // ════════════════════════════════════════════════════════════
 //  FEATURE 5 — DX Cluster live
 // ════════════════════════════════════════════════════════════
 let clusterOpen=false,clusterInterval=null;
 function toggleCluster(){clusterOpen=!clusterOpen;document.getElementById('cluster-panel').classList.toggle('open',clusterOpen);if(clusterOpen){fetchCluster();clusterInterval=setInterval(fetchCluster,60000)}else clearInterval(clusterInterval)}
-async function fetchCluster(){const band=document.getElementById('cl-band')?.value||'';const mode=document.getElementById('cl-mode')?.value||'';const dot=document.getElementById('cluster-dot');if(dot)dot.className='cluster-dot';try{const url=`<?= BASE_URL ?>/api/cluster.php?limit=25${band?'&band='+band:''}${mode?'&mode='+mode:''}`;const d=await fetch(url).then(r=>r.json());if(!d.ok){renderClusterError(d.error||'Errore.');return}renderClusterSpots(d.spots);if(dot)dot.className='cluster-dot live';const ts=document.getElementById('cluster-ts');if(ts)ts.textContent='Aggiornato '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}catch(e){renderClusterError('Errore di rete.')}}
+async function fetchCluster(){const band=document.getElementById('cl-band')?.value||'';const mode=document.getElementById('cl-mode')?.value||'';const dot=document.getElementById('cluster-dot');if(dot)dot.className='cluster-dot';try{const url=`<?= BASE_URL ?>/api/cluster.php?limit=25${band?'&band='+band:''}${mode?'&mode='+mode:''}`;const d=await fetch(url).then(r=>r.json());if(!d.ok){renderClusterError(d.error||'Errore.');return}renderClusterSpots(d.spots);if(dot)dot.className='cluster-dot live';const ts=document.getElementById('cluster-ts');if(ts)ts.textContent='Aggiornato '+new Date().toLocaleTimeString(I18N.locale(),{hour:'2-digit',minute:'2-digit'})}catch(e){renderClusterError('Errore di rete.')}}
 function renderClusterError(msg){const el=document.getElementById('cluster-list');if(el)el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--red);font-family:'Share Tech Mono',monospace;font-size:11px">${msg}</div>`}
 function renderClusterSpots(spots){const el=document.getElementById('cluster-list');if(!el)return;if(!spots.length){el.innerHTML='<div style="padding:20px;text-align:center;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--txm)">Nessuno spot.</div>';return}el.innerHTML=spots.map(s=>`<div class="cluster-spot" onclick="spotToForm('${s.dx}','${s.freq}','${s.band}','${s.mode}')" title="${(s.comment||'').replace(/'/g,'')}"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="spot-dx">${s.dx}</span><span class="spot-freq">${s.freq>0?s.freq.toFixed(1)+' MHz':s.band}</span></div><div class="spot-info">${s.mode?'<b>'+s.mode+'</b> · ':''} ${s.comment||'—'} <span style="color:var(--txm);margin-left:4px">${s.time||''}</span></div></div>`).join('')}
 function spotToForm(dx,freq,band,mode){const callEl=document.getElementById('f-call');const freqEl=document.getElementById('f-freq');const bandEl=document.getElementById('f-band');const modeEl=document.getElementById('f-mode');if(callEl)callEl.value=dx;if(freq>0&&freqEl){freqEl.value=freq;onFreqInput()}else if(band&&bandEl)bandEl.value=band.toLowerCase();if(mode&&modeEl){const m=MODES.find(x=>x===mode.toUpperCase());if(m)modeEl.value=m}callEl?.dispatchEvent(new Event('input'));callEl?.focus();toggleCluster()}
@@ -1229,7 +1191,7 @@ function renderStatsChart(type){
   else if(type==='band'){const bands=['160m','80m','40m','30m','20m','17m','15m','12m','10m','6m','2m','70cm'];const counts={};bands.forEach(b=>counts[b]=0);log.forEach(q=>{if(counts[q.band]!==undefined)counts[q.band]++});const active=bands.filter(b=>counts[b]>0);labels=active;data=active.map(b=>counts[b]);label='QSO per banda';const top=active[data.indexOf(Math.max(...data))];const s=document.getElementById('stats-summary');if(s&&top)s.textContent=`Banda più attiva: ${top} (${counts[top]} QSO)`}
   else if(type==='mode'){const mc={};log.forEach(q=>{mc[q.mode]=(mc[q.mode]||0)+1});const sorted=Object.entries(mc).sort((a,b)=>b[1]-a[1]);labels=sorted.map(e=>e[0]);data=sorted.map(e=>e[1]);label='QSO per modo';const s=document.getElementById('stats-summary');if(s&&sorted[0])s.textContent=`Modo più usato: ${sorted[0][0]} (${sorted[0][1]} QSO)`}
   else if(type==='day'){const dc={};log.forEach(q=>{if(q.qso_date)dc[q.qso_date]=(dc[q.qso_date]||0)+1});const sorted=Object.entries(dc).sort((a,b)=>a[0].localeCompare(b[0])).slice(-14);labels=sorted.map(e=>e[0].slice(5));data=sorted.map(e=>e[1]);const s=document.getElementById('stats-summary');if(s)s.textContent=`${data.reduce((a,b)=>a+b,0)} QSO negli ultimi ${sorted.length} giorni`}
-  statsChartInstance=new Chart(canvas,{type:'bar',data:{labels,datasets:[{label,data,backgroundColor:accent+'33',borderColor:accent,borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5a8a5a',font:{family:'Share Tech Mono',size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5a8a5a',font:{family:'Share Tech Mono',size:10}},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}}}});
+  statsChartInstance=new Chart(canvas,{type:'bar',data:{labels,datasets:[{label:T(label),data,backgroundColor:accent+'33',borderColor:accent,borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5a8a5a',font:{family:'Share Tech Mono',size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5a8a5a',font:{family:'Share Tech Mono',size:10}},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}}}});
 }
 
 // ── Auto login ────────────────────────────────────────────────
@@ -1249,5 +1211,6 @@ function renderStatsChart(type){
   }
 }());
 </script>
+<?= i18n_client_script() ?>
 </body>
 </html>

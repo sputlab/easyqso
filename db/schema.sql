@@ -1,5 +1,5 @@
 -- ============================================================
---  EasyQSO v2.1.2 — Schema MySQL
+--  EasyQSO v2.2.0 — Schema MySQL
 --  Compatibile con MySQL 5.7+ / MariaDB 10.3+
 --  Tabelle: eqso_users, eqso_sessions, eqso_qso_log
 --  Importa con: mysql -u user -p dbname < schema.sql
@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS eqso_users (
     suspended_reason VARCHAR(255) DEFAULT NULL,
     force_pw_change  TINYINT(1)   NOT NULL DEFAULT 0,
     theme         VARCHAR(20)   NOT NULL DEFAULT 'radio',
+    lang          VARCHAR(5)    NOT NULL DEFAULT 'it',
     opt_autotime  TINYINT(1)    NOT NULL DEFAULT 1,
     opt_keepfreq  TINYINT(1)    NOT NULL DEFAULT 0,
     created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -3,6 +3,18 @@
 Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/),
 versionamento secondo [Semantic Versioning](https://semver.org/lang/it/).
 
+## [2.2.0] - 2026-11
+### Added
+- **Traduzione in inglese** di tutta la webapp (pagine, messaggi API, email). Lingua impostabile da *Il mio account* (nuova colonna `eqso_users.lang`, migrazione `db/migration_v220.sql`); selettore IT/EN anche nel login.
+- **Guida integrata** (menu ☰ → *Guida*) e **guida illustrata** `src/guide.html` con screenshot (IT/EN).
+- Pulsante **Annulla contest**: ferma e azzera il timer del contest (i QSO nel log non vengono toccati).
+### Fixed
+- Il flag **Admin** nella creazione di un nuovo utente era invisibile (checkbox nascosta dallo stile dei campi).
+- I pulsanti **ADIF** e **CSV** sono ora affiancati a destra della barra filtri.
+### Changed
+- Rimosso il vecchio pannello Account dalla pagina principale (sostituito da `account.php`).
+- Il README documenta quale file SQL usare per installazione, reinstallazione e aggiornamento.
+
 ## [2.1.2] - 2026-11
 ### Fixed
 - `src/api/.htaccess` e `src/includes/.htaccess` contenevano un prefisso `-e ` errato (presente dalla 2.0.2) che causava HTTP 500 su Apache, quindi nessun login. Ora le direttive sono valide; `includes/` usa `Require all denied` con fallback Apache 2.2.

@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  EasyQSO v2.1.2 — Test Suite (PHPUnit 10+)
+//  EasyQSO v2.2.0 — Test Suite (PHPUnit 10+)
 //  Esegui con:  ./vendor/bin/phpunit tests/EasyQSOTest.php
 //  Prerequisiti:
 //    composer require --dev phpunit/phpunit

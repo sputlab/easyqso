@@ -72,13 +72,13 @@ function admin_update_user(int $admin_id, string $admin_call, int $uid, array $b
 // ── Invia link reset password ────────────────────────────────
 function admin_send_reset(int $admin_id, string $admin_call, int $uid): array {
     $db = db();
-    $st = $db->prepare('SELECT email,callsign FROM eqso_users WHERE id=? AND is_active=1');
+    $st = $db->prepare('SELECT email,callsign,lang FROM eqso_users WHERE id=? AND is_active=1');
     $st->execute([$uid]); $u=$st->fetch();
     if (!$u) return ['ok'=>false,'error'=>'Utente non trovato o inattivo.'];
     $token   = generate_token(32);
     $expires = date('Y-m-d H:i:s',time()+3600);
     $db->prepare('UPDATE eqso_users SET reset_token=?,reset_expires=? WHERE id=?')->execute([$token,$expires,$uid]);
-    send_reset_email($u['email'],$u['callsign'],$token);
+    send_reset_email($u['email'],$u['callsign'],$token,$u['lang']??'it');
     audit($admin_id,$admin_call,'admin_reset_password',$uid);
     return ['ok'=>true];
 }

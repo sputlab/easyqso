@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/i18n.php';
+$L = i18n_lang();
 $token   = trim($_GET['token'] ?? '');
 $done    = false;
 $error   = '';
@@ -8,17 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pw  = $_POST['password']  ?? '';
     $pw2 = $_POST['password2'] ?? '';
     $tok = $_POST['token']     ?? '';
-    if (strlen($pw) < 8)   $error = 'Password minimo 8 caratteri.';
-    elseif ($pw !== $pw2)  $error = 'Le password non coincidono.';
-    elseif (!do_password_reset($tok, $pw)) $error = 'Token scaduto o non valido.';
+    if (strlen($pw) < 8)   $error = tr('Password minimo 8 caratteri.');
+    elseif ($pw !== $pw2)  $error = tr('Le password non coincidono.');
+    elseif (!do_password_reset($tok, $pw)) $error = tr('Token scaduto o non valido.');
     else $done = true;
 }
 ?><!DOCTYPE html>
-<html lang="it">
+<html lang="<?= $L ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Reset Password — EasyQSO</title>
+<title><?= tr('Reset Password — EasyQSO') ?></title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@700&family=Share+Tech+Mono&display=swap');
   *{box-sizing:border-box;margin:0;padding:0}
@@ -41,26 +43,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="card">
   <div class="logo">EasyQSO</div>
-  <div class="sub">RESET PASSWORD</div>
+  <div class="sub"><?= tr('RESET PASSWORD') ?></div>
   <?php if ($done): ?>
   <div class="success">
     <div class="icon">✅</div>
-    <h2>Password aggiornata!</h2>
-    <p>Puoi accedere con la tua nuova password.</p>
-    <a class="link" href="<?= BASE_URL ?>">Vai al Login</a>
+    <h2><?= tr('Password aggiornata!') ?></h2>
+    <p><?= tr('Puoi accedere con la tua nuova password.') ?></p>
+    <a class="link" href="<?= BASE_URL ?>"><?= tr('Vai al Login') ?></a>
   </div>
   <?php elseif (!$token): ?>
-  <div class="error">Link non valido. Richiedi un nuovo reset dalla pagina di login.</div>
-  <a class="link" href="<?= BASE_URL ?>">Torna al Login</a>
+  <div class="error"><?= tr('Link non valido. Richiedi un nuovo reset dalla pagina di login.') ?></div>
+  <a class="link" href="<?= BASE_URL ?>"><?= tr('Torna al Login') ?></a>
   <?php else: ?>
   <?php if ($error): ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif ?>
   <form method="post">
     <input type="hidden" name="token" value="<?= htmlspecialchars($token) ?>">
-    <label>Nuova password</label>
-    <input type="password" name="password" placeholder="Minimo 8 caratteri" required>
-    <label>Conferma password</label>
-    <input type="password" name="password2" placeholder="Ripeti la password" required>
-    <button class="btn" type="submit">AGGIORNA PASSWORD</button>
+    <label><?= tr('Nuova password') ?></label>
+    <input type="password" name="password" placeholder="<?= tr('Minimo 8 caratteri') ?>" required>
+    <label><?= tr('Conferma password') ?></label>
+    <input type="password" name="password2" placeholder="<?= tr('Ripeti la password') ?>" required>
+    <button class="btn" type="submit"><?= tr('AGGIORNA PASSWORD') ?></button>
   </form>
   <?php endif ?>
 </div>

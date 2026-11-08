@@ -2,12 +2,14 @@
 require_once __DIR__.'/includes/config.php';
 require_once __DIR__.'/includes/auth.php';
 require_once __DIR__.'/includes/account.php';
+require_once __DIR__.'/includes/i18n.php';
+$L=i18n_lang();
 $token=trim($_GET['token']??'');
 $result=null;
 if($token){ $result=account_confirm_delete($token); }
-?><!DOCTYPE html><html lang="it"><head>
+?><!DOCTYPE html><html lang="<?= $L ?>"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Eliminazione Account — EasyQSO</title>
+<title><?= tr('Eliminazione Account — EasyQSO') ?></title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -23,14 +25,14 @@ p{color:#5a8a5a;font-size:14px;line-height:1.6;margin-bottom:22px}
 <div class="card">
   <div class="logo">EasyQSO</div>
   <?php if(!$token): ?>
-    <div class="icon">❌</div><h2 style="color:#ff4444">Link non valido</h2>
-    <p>Nessun token fornito.</p>
+    <div class="icon">❌</div><h2 style="color:#ff4444">   <?= tr('Link non valido') ?></h2>
+    <p><?= tr('Nessun token fornito.') ?></p>
   <?php elseif(!$result||!$result['ok']): ?>
-    <div class="icon">⚠️</div><h2 style="color:#ffaa00">Link scaduto o già usato</h2>
-    <p><?= htmlspecialchars($result['error']??'Il link non è più valido.') ?></p>
+    <div class="icon">⚠️</div><h2 style="color:#ffaa00">   <?= tr('Link scaduto o già usato') ?></h2>
+    <p><?= htmlspecialchars(tr($result['error']??'Il link non è più valido.')) ?></p>
   <?php else: ?>
-    <div class="icon">✅</div><h2 style="color:#39ff6a">Account eliminato</h2>
-    <p>Il tuo account EasyQSO è stato eliminato con successo. I tuoi dati sono stati rimossi.</p>
+    <div class="icon">✅</div><h2 style="color:#39ff6a">   <?= tr('Account eliminato') ?></h2>
+    <p><?= tr('Il tuo account EasyQSO è stato eliminato con successo. I tuoi dati sono stati rimossi.') ?></p>
   <?php endif ?>
-  <a class="btn" href="<?= BASE_URL ?>">Torna alla Home</a>
+  <a class="btn" href="<?= BASE_URL ?>"><?= tr('Torna alla Home') ?></a>
 </div></body></html>

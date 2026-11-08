@@ -1,5 +1,5 @@
 -- ============================================================
---  EasyQSO v2.1.2 — Reinstallazione COMPLETA da zero
+--  EasyQSO v2.2.0 — Reinstallazione COMPLETA da zero
 --  ⚠️  CANCELLA tutte le tabelle EasyQSO e TUTTI i dati
 --      (utenti, QSO, sessioni, log) e le ricrea aggiornate.
 --  Un solo import, nessuna migrazione successiva.
@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS eqso_users (
     suspended_reason VARCHAR(255) DEFAULT NULL,
     force_pw_change  TINYINT(1)   NOT NULL DEFAULT 0,
     theme         VARCHAR(20)   NOT NULL DEFAULT 'radio',
+    lang          VARCHAR(5)    NOT NULL DEFAULT 'it',
     opt_autotime  TINYINT(1)    NOT NULL DEFAULT 1,
     opt_keepfreq  TINYINT(1)    NOT NULL DEFAULT 0,
     created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,

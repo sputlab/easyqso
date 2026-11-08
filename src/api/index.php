@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  EasyQSO v2.1.2 — API REST
+//  EasyQSO v2.2.0 — API REST
 // ============================================================
 $allowed = ['https://www.sputlab.com','https://sputlab.com'];
 $origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -85,7 +85,7 @@ function auth_do_register(array $b):void{
     if(strlen($pass)<8) json_error('Password minimo 8 caratteri.');
     if($pass!==$pass2) json_error('Le password non coincidono.');
     if(!preg_match('/^[A-Z0-9\/]{2,12}$/i',$call)) json_error('Nominativo non valido.');
-    $r=register_user($call,$email,$pass);
+    $r=register_user($call,$email,$pass,(string)($b['lang']??'it'));
     if(!$r['ok']) json_error($r['error']);
     json_ok(['message'=>'Registrazione completata! Controlla la tua email.'],201);
 }
@@ -213,15 +213,17 @@ function route_user(string $m,?string $action,?string $sub,array $b):void{
 function user_get_settings(array $user):void{
     json_ok(['settings'=>['callsign'=>$user['callsign'],'email'=>$user['email'],
         'theme'=>$user['theme'],'opt_autotime'=>(bool)$user['opt_autotime'],
-        'opt_keepfreq'=>(bool)$user['opt_keepfreq'],'is_admin'=>(bool)$user['is_admin']]]);
+        'opt_keepfreq'=>(bool)$user['opt_keepfreq'],'is_admin'=>(bool)$user['is_admin'],
+        'lang'=>$user['lang']??'it']]);
 }
 function user_save_settings(array $user,array $b):void{
     $theme=in_array($b['theme']??'',['radio','dark','light'])?$b['theme']:$user['theme'];
     $at=isset($b['opt_autotime'])?(int)(bool)$b['opt_autotime']:(int)$user['opt_autotime'];
     $kf=isset($b['opt_keepfreq'])?(int)(bool)$b['opt_keepfreq']:(int)$user['opt_keepfreq'];
-    db()->prepare('UPDATE eqso_users SET theme=?,opt_autotime=?,opt_keepfreq=? WHERE id=?')
-        ->execute([$theme,$at,$kf,$user['id']]);
-    json_ok(['message'=>'Impostazioni salvate.']);
+    $lang=i18n_valid($b['lang']??null)??($user['lang']??'it');
+    db()->prepare('UPDATE eqso_users SET theme=?,opt_autotime=?,opt_keepfreq=?,lang=? WHERE id=?')
+        ->execute([$theme,$at,$kf,$lang,$user['id']]);
+    json_ok(['message'=>'Impostazioni salvate.','lang'=>$lang]);
 }
 function user_do_change_callsign(array $user,array $b):void{
     $r=account_change_callsign($user['id'],$b['callsign']??'');
@@ -269,7 +271,7 @@ function user_export_adif(array $user):void{
     $st->execute([$user['id']]);
     header('Content-Type: text/plain; charset=utf-8');
     header('Content-Disposition: attachment; filename="easyqso_export.adi"');
-    echo "ADIF Export from EasyQSO v2.1.2\n<EOH>\n\n";
+    echo "ADIF Export from EasyQSO v2.2.0\n<EOH>\n\n";
     foreach($st->fetchAll() as $q){
         $d=str_replace('-','',$q['qso_date']);$t=str_replace(':','',substr($q['qso_time'],0,5));
         $f=$q['freq']?number_format((float)$q['freq'],3,'.',''): '';

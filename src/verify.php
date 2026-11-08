@@ -1,14 +1,16 @@
 <?php
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/i18n.php';
+$L = i18n_lang();
 $token   = trim($_GET['token'] ?? '');
 $success = $token && verify_email($token);
 ?><!DOCTYPE html>
-<html lang="it">
+<html lang="<?= $L ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Verifica Email — EasyQSO</title>
+<title><?= tr('Verifica Email — EasyQSO') ?></title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@700&display=swap');
   *{box-sizing:border-box;margin:0;padding:0}
@@ -25,8 +27,8 @@ $success = $token && verify_email($token);
 <div class="card">
   <div class="logo">EasyQSO</div>
   <div class="icon"><?= $success ? '✅' : '❌' ?></div>
-  <h2><?= $success ? 'Email verificata!' : 'Link non valido' ?></h2>
-  <p><?= $success ? 'Il tuo account è attivo. Puoi accedere a EasyQSO.' : 'Il link è scaduto o già utilizzato. Richiedi una nuova verifica.' ?></p>
-  <a class="btn" href="<?= BASE_URL ?>">Vai al Login</a>
+  <h2><?= tr($success ? 'Email verificata!' : 'Link non valido') ?></h2>
+  <p><?= tr($success ? 'Il tuo account è attivo. Puoi accedere a EasyQSO.' : 'Il link è scaduto o già utilizzato. Richiedi una nuova verifica.') ?></p>
+  <a class="btn" href="<?= BASE_URL ?>"><?= tr('Vai al Login') ?></a>
 </div>
 </body></html>
