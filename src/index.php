@@ -362,7 +362,7 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
    <button class="theme-btn" data-theme="dark" onclick="setTheme('dark',this)"><span class="tdot tdot-d"></span>🌑 DARK</button>
    <button class="theme-btn" data-theme="light" onclick="setTheme('light',this)"><span class="tdot tdot-l"></span>☀️ LIGHT</button>
    <div class="menu-sep">Account</div>
-   <button class="menu-btn" onclick="openAccount()"><span>👤</span> Account</button>
+   <a class="menu-btn" href="account.php" style="text-decoration:none"><span>👤</span> Il mio account</a>
    <div id="menu-users-item" style="display:none"><button class="menu-btn" onclick="openUserMgmt()"><span>👥</span> Gestione Utenti</button></div>
    <div class="menu-sep">Strumenti</div>
    <button class="menu-btn" onclick="openTools('stats')"><span>📊</span> Statistiche</button>
@@ -450,8 +450,11 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
   <button class="bp" data-band="160m" onclick="setBand(this)">160m</button>
   <button class="bp" data-band="80m" onclick="setBand(this)">80m</button>
   <button class="bp" data-band="40m" onclick="setBand(this)">40m</button>
+  <button class="bp" data-band="30m" onclick="setBand(this)">30m</button>
   <button class="bp" data-band="20m" onclick="setBand(this)">20m</button>
+  <button class="bp" data-band="17m" onclick="setBand(this)">17m</button>
   <button class="bp" data-band="15m" onclick="setBand(this)">15m</button>
+  <button class="bp" data-band="12m" onclick="setBand(this)">12m</button>
   <button class="bp" data-band="10m" onclick="setBand(this)">10m</button>
   <button class="bp" data-band="6m" onclick="setBand(this)">6m</button>
  </div>
@@ -487,8 +490,8 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
   <select class="cluster-sel" id="cl-band" onchange="fetchCluster()">
    <option value="">Tutte le bande</option>
    <option value="160m">160m</option><option value="80m">80m</option><option value="40m">40m</option>
-   <option value="20m">20m</option><option value="17m">17m</option><option value="15m">15m</option>
-   <option value="10m">10m</option><option value="6m">6m</option>
+   <option value="30m">30m</option><option value="20m">20m</option><option value="17m">17m</option><option value="15m">15m</option>
+   <option value="12m">12m</option><option value="10m">10m</option><option value="6m">6m</option>
   </select>
   <select class="cluster-sel" id="cl-mode" onchange="fetchCluster()">
    <option value="">Tutti i modi</option>
@@ -605,7 +608,7 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
     <div class="pfield"><label>Contest</label><select class="cab-sel" id="cab-contest"><option value="CQ-WW-SSB">CQ WW SSB</option><option value="CQ-WW-CW">CQ WW CW</option><option value="CQ-WPX-SSB">CQ WPX SSB</option><option value="CQ-WPX-CW">CQ WPX CW</option><option value="ARRL-DX-SSB">ARRL DX SSB</option><option value="ARRL-DX-CW">ARRL DX CW</option><option value="ARI-DX">ARI DX</option><option value="IOTA">IOTA</option></select></div>
     <div class="pfield"><label>Categoria</label><select class="cab-sel" id="cab-cat"><option value="SINGLE-OP">Single Op</option><option value="MULTI-OP">Multi Op</option><option value="CHECKLOG">Checklog</option></select></div>
     <div class="pfield"><label>Potenza</label><select class="cab-sel" id="cab-pwr"><option value="HIGH">High Power</option><option value="LOW">Low Power</option><option value="QRP">QRP</option></select></div>
-    <div class="pfield"><label>Banda</label><select class="cab-sel" id="cab-band"><option value="ALL">All Band</option><option value="160M">160m</option><option value="80M">80m</option><option value="40M">40m</option><option value="20M">20m</option><option value="15M">15m</option><option value="10M">10m</option></select></div>
+    <div class="pfield"><label>Banda</label><select class="cab-sel" id="cab-band"><option value="ALL">All Band</option><option value="160M">160m</option><option value="80M">80m</option><option value="40M">40m</option><option value="30M">30m</option><option value="20M">20m</option><option value="17M">17m</option><option value="15M">15m</option><option value="12M">12m</option><option value="10M">10m</option></select></div>
    </div>
    <button class="pbtn" onclick="exportCabrillo()">⬇ SCARICA .CBR</button>
   </div>
@@ -720,7 +723,10 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
  <div class="modal">
   <button class="mc" onclick="closeOv('ov-changelog')">✕</button>
   <div class="mt" style="font-size:22px;margin-bottom:16px">Changelog</div>
-  <div class="cle"><div class="clv">v2.0.2 — corrente</div><div class="cld">Settembre 2026</div>
+  <div class="cle"><div class="clv">v2.1.0 — corrente</div><div class="cld">Novembre 2026</div>
+   <ul class="cll"><li>👤 Pagina di autogestione account (nominativo, password, sessioni, eliminazione)</li><li>📻 Banda 30m (e 17m/12m) nei filtri, cluster e Cabrillo</li></ul></div>
+  <hr class="mdiv">
+  <div class="cle"><div class="clv">v2.0.2</div><div class="cld">Settembre 2026</div>
    <ul class="cll"><li>🎯 DXCC auto-fill dal nominativo (260 prefissi)</li><li>📥 Import ADIF</li><li>🏆 Export Cabrillo per contest</li><li>📊 Grafici QSO per ora/banda/modo/giorno</li><li>📡 DX Cluster live con prefill form</li><li>🗺️ Mappa DXCC interattiva su canvas</li><li>🏆 Modalità Contest con timer e score live</li><li>🔔 Notifiche desktop</li><li>💾 Backup ADIF automatico</li><li>🔍 Lookup QRZ.com one-click</li></ul></div>
   <hr class="mdiv">
   <div class="cle"><div class="clv">v2.0.1</div><div class="cld">Settembre 2026</div>

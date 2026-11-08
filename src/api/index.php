@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  EasyQSO v2.0.2 — API REST
+//  EasyQSO v2.1.0 — API REST
 // ============================================================
 $allowed = ['https://www.sputlab.com','https://sputlab.com'];
 $origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -240,7 +240,7 @@ function user_export_adif(array $user):void{
     $st->execute([$user['id']]);
     header('Content-Type: text/plain; charset=utf-8');
     header('Content-Disposition: attachment; filename="easyqso_export.adi"');
-    echo "ADIF Export from EasyQSO v2.0.2\n<EOH>\n\n";
+    echo "ADIF Export from EasyQSO v2.1.0\n<EOH>\n\n";
     foreach($st->fetchAll() as $q){
         $d=str_replace('-','',$q['qso_date']);$t=str_replace(':','',substr($q['qso_time'],0,5));
         $f=$q['freq']?number_format((float)$q['freq'],3,'.',''): '';

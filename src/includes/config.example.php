@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  EasyQSO v2.0.2 — Configurazione
+//  EasyQSO v2.1.0 — Configurazione
 //  1. Copia questo file:  cp config.example.php config.php
 //  2. Compila tutti i campi qui sotto
 //  3. NON committare mai config.php su repository pubblici!
@@ -33,5 +33,5 @@ define('MAIL_FROM',      'noreply@tuodominio.com');
 define('MAIL_FROM_NAME', 'EasyQSO');
 
 // ── App ──────────────────────────────────────────────────────
-define('APP_VERSION', '2.0.2');
+define('APP_VERSION', '2.1.0');
 define('APP_NAME',    'EasyQSO');
