@@ -12,7 +12,7 @@ Logbook web per radioamatori (PHP + MySQL, SPA integrata): log QSO, import ADIF,
 ## Installazione
 
 1. **Carica** il contenuto di `src/` sul server
-2. **DB**: crea il database e importa `db/schema.sql`; se aggiorni da v2.0.1 importa `db/migration_v202.sql` (la v2.1.1 non richiede nuove migrazioni)
+2. **DB**: crea il database e importa `db/schema.sql`; se aggiorni da v2.0.1 importa `db/migration_v202.sql` (le versioni 2.1.x non richiedono altre migrazioni; `schema.sql` serve per le nuove installazioni e **non** aggiorna un DB esistente)
 3. **Config**: `cp includes/config.example.php includes/config.php` e compila i dati (generare `SECRET_KEY` con `openssl rand -hex 32`)
 4. **Nginx**: aggiungi i blocchi `location` di `docs/nginx.conf` al tuo virtual host
 5. **Apri** `https://tuodominio.com/easyqso/`
