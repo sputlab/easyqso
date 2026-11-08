@@ -29,3 +29,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# Archivio locale
+EasyQSO_archive/
