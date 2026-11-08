@@ -1106,7 +1106,7 @@ function audPage(dir){loadAudit(Math.max(1,Math.min(audTotalPages,audCurrentPage
 // ════════════════════════════════════════════════════════════
 //  FEATURE 1 — DXCC Auto-fill
 // ════════════════════════════════════════════════════════════
-async function loadDXCC(){try{const r=await fetch('<?= BASE_URL ?>/assets/dxcc.json');DXCC=await r.json()}catch(e){console.warn('DXCC not loaded')}}
+async function loadDXCC(){try{const r=await fetch(API+'/dxcc');DXCC=await r.json()}catch(e){console.warn('DXCC not loaded')}}
 function extractPrefix(callsign){
   const clean=callsign.replace(/\/[A-Z0-9]+$/,'').toUpperCase();
   const local=clean.includes('/')?clean.split('/').pop():clean;

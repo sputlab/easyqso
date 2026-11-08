@@ -48,8 +48,18 @@ match($res){
     'qso'   => route_qso($method,$id,$body),
     'user'  => route_user($method,$id,$sub,$body),
     'admin' => route_admin($method,$id,$sub,$body),
+    'dxcc'  => api_dxcc(),
     default => json_error('Endpoint non trovato.',404),
 };
+
+// Tabella prefissi DXCC servita via PHP (alcuni hosting bloccano /assets/*.json)
+function api_dxcc():void{
+    $f=__DIR__.'/../assets/dxcc.json';
+    if(!is_readable($f))json_error('Tabella DXCC non disponibile.',404);
+    header('Cache-Control: public, max-age=86400');
+    header('Content-Length: '.filesize($f));
+    readfile($f); exit;
+}
 
 // ════════════════════════════════════════════════════════════
 //  AUTH
