@@ -2,7 +2,7 @@
 
 Logbook web per radioamatori (PHP + MySQL, SPA integrata): log QSO, import ADIF, export Cabrillo, DX Cluster, DXCC, pannello admin, pagina di autogestione account (`account.php`: nominativo, password, sessioni, eliminazione).
 
-**Versione corrente: 2.1.1** · Licenza [MIT](LICENSE) · [Changelog](CHANGELOG.md)
+**Versione corrente: 2.1.2** · Licenza [MIT](LICENSE) · [Changelog](CHANGELOG.md)
 
 ## Prerequisiti
 - PHP 8.1+ con PDO MySQL

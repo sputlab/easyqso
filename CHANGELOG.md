@@ -3,6 +3,11 @@
 Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/),
 versionamento secondo [Semantic Versioning](https://semver.org/lang/it/).
 
+## [2.1.2] - 2026-11
+### Fixed
+- `src/api/.htaccess` e `src/includes/.htaccess` contenevano un prefisso `-e ` errato (presente dalla 2.0.2) che causava HTTP 500 su Apache, quindi nessun login. Ora le direttive sono valide; `includes/` usa `Require all denied` con fallback Apache 2.2.
+- `db/schema.sql` non includeva le tabelle/colonne introdotte dalla 2.0.2 (`eqso_rate_limits`, `eqso_account_tokens`, `eqso_audit_log`, `suspended_reason`, `force_pw_change`): le nuove installazioni andavano in errore al login. Ora lo schema è completo.
+
 ## [2.1.1] - 2026-11
 ### Fixed
 - L'API risponde sempre con JSON anche in caso di errore interno (prima un 500 HTML anonimo faceva mostrare solo "Errore." al login); il dettaglio viene scritto nel log PHP.
