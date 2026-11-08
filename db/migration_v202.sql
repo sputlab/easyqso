@@ -6,8 +6,8 @@ SET NAMES utf8mb4;
 
 -- ── Colonne aggiuntive su eqso_users ────────────────────────
 ALTER TABLE eqso_users
-  ADD COLUMN IF NOT EXISTS suspended_reason VARCHAR(255) DEFAULT NULL AFTER is_active,
-  ADD COLUMN IF NOT EXISTS force_pw_change   TINYINT(1)  NOT NULL DEFAULT 0 AFTER suspended_reason;
+ALTER TABLE eqso_users ADD COLUMN suspended_reason VARCHAR(255) DEFAULT NULL AFTER is_active;
+ALTER TABLE eqso_users ADD COLUMN force_pw_change TINYINT(1) NOT NULL DEFAULT 0 AFTER suspended_reason;
 
 -- ── Token monouso per azioni via email ──────────────────────
 CREATE TABLE IF NOT EXISTS eqso_account_tokens (

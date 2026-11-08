@@ -111,6 +111,6 @@ INSERT IGNORE INTO eqso_users
 VALUES (
     'ADMIN',
     'admin@easyqso.local',
-    '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.',
+    '$2y$12$DoCbmBTGklVt2CqGf1Rz1uq29xumjezr8YJy2GuUKcb7VFL864anS',
     1, 1
 );

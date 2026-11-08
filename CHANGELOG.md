@@ -7,6 +7,9 @@ versionamento secondo [Semantic Versioning](https://semver.org/lang/it/).
 ### Fixed
 - `src/api/.htaccess` e `src/includes/.htaccess` contenevano un prefisso `-e ` errato (presente dalla 2.0.2) che causava HTTP 500 su Apache, quindi nessun login. Ora le direttive sono valide; `includes/` usa `Require all denied` con fallback Apache 2.2.
 - `db/schema.sql` non includeva le tabelle/colonne introdotte dalla 2.0.2 (`eqso_rate_limits`, `eqso_account_tokens`, `eqso_audit_log`, `suspended_reason`, `force_pw_change`): le nuove installazioni andavano in errore al login. Ora lo schema è completo.
+- L'hash dell'utente admin di default in `schema.sql` non corrispondeva a `Admin1234!` (login impossibile): sostituito con un hash valido.
+### Added
+- `db/schema_reset.sql`: reinstallazione completa da zero (cancella e ricrea tutte le tabelle).
 
 ## [2.1.1] - 2026-11
 ### Fixed
