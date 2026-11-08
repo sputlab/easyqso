@@ -17,6 +17,7 @@ require_once __DIR__.'/../src/includes/auth.php';
 require_once __DIR__.'/../src/includes/rate_limit.php';
 require_once __DIR__.'/../src/includes/account.php';
 require_once __DIR__.'/../src/includes/admin_mgmt.php';
+require_once __DIR__.'/../src/includes/i18n.php';
 
 // ── Helper: crea utente di test e lo rimuove dopo il test ───
 trait UserFactory {
@@ -100,6 +101,17 @@ final class AccountTest extends TestCase {
         $r = account_change_callsign($u['id'], 'IZ3XYZ');
         $this->assertTrue($r['ok']);
         $this->assertEquals('IZ3XYZ', $r['callsign']);
+        $this->cleanUser($u['id']);
+    }
+
+    public function test_change_lang(): void {
+        $u = $this->makeUser('L');
+        $r = account_change_lang($u['id'], 'en');
+        $this->assertTrue($r['ok']);
+        $this->assertEquals('en', $r['lang']);
+        $st = db()->prepare('SELECT lang FROM eqso_users WHERE id=?'); $st->execute([$u['id']]);
+        $this->assertEquals('en', $st->fetchColumn());
+        $this->assertFalse(account_change_lang($u['id'], 'xx')['ok']);
         $this->cleanUser($u['id']);
     }
 
@@ -348,5 +360,28 @@ final class RateLimitTest extends TestCase {
         rate_reset($id,'login');
         $this->assertTrue(rate_check($id,'login',5,900));
         db()->prepare('DELETE FROM eqso_rate_limits WHERE identifier=?')->execute([$id]);
+    }
+}
+
+
+// ── i18n ─────────────────────────────────────────────────────
+final class I18nTest extends TestCase {
+    public function test_tr_translates_to_english(): void {
+        $this->assertSame('Cancel', tr('Annulla', 'en'));
+    }
+    public function test_tr_keeps_italian(): void {
+        $this->assertSame('Annulla', tr('Annulla', 'it'));
+    }
+    public function test_tr_unknown_key_falls_back_to_source(): void {
+        $this->assertSame('Frase mai vista', tr('Frase mai vista', 'en'));
+    }
+    public function test_invalid_lang_is_rejected(): void {
+        $this->assertNull(i18n_valid('fr'));
+        $this->assertSame('en', i18n_valid('EN'));
+    }
+    public function test_patterns_are_valid_regex(): void {
+        foreach (i18n_patterns() as [$re]) {
+            $this->assertNotFalse(@preg_match('/'.str_replace('/','\\/',$re).'/u', ''), $re);
+        }
     }
 }
