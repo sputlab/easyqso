@@ -723,7 +723,10 @@ td.fq{color:var(--ac4)}td.rs{color:var(--ac2)}td.sn{color:var(--txm);font-size:1
  <div class="modal">
   <button class="mc" onclick="closeOv('ov-changelog')">✕</button>
   <div class="mt" style="font-size:22px;margin-bottom:16px">Changelog</div>
-  <div class="cle"><div class="clv">v2.1.0 — corrente</div><div class="cld">Novembre 2026</div>
+  <div class="cle"><div class="clv">v2.1.1 — corrente</div><div class="cld">Novembre 2026</div>
+   <ul class="cll"><li>🛠️ L'API risponde sempre in JSON anche in caso di errore interno</li><li>🗄️ Avviso esplicito se il database non è migrato</li></ul></div>
+  <hr class="mdiv">
+  <div class="cle"><div class="clv">v2.1.0</div><div class="cld">Novembre 2026</div>
    <ul class="cll"><li>👤 Pagina di autogestione account (nominativo, password, sessioni, eliminazione)</li><li>📻 Banda 30m (e 17m/12m) nei filtri, cluster e Cabrillo</li></ul></div>
   <hr class="mdiv">
   <div class="cle"><div class="clv">v2.0.2</div><div class="cld">Settembre 2026</div>

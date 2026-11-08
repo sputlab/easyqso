@@ -3,6 +3,11 @@
 Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/),
 versionamento secondo [Semantic Versioning](https://semver.org/lang/it/).
 
+## [2.1.1] - 2026-11
+### Fixed
+- L'API risponde sempre con JSON anche in caso di errore interno (prima un 500 HTML anonimo faceva mostrare solo "Errore." al login); il dettaglio viene scritto nel log PHP.
+- Se il DB non è migrato (tabella/colonna mancante) l'API segnala "Database non aggiornato: esegui le migrazioni in db/".
+
 ## [2.1.0] - 2026-11
 ### Added
 - Pagina di autogestione account `src/account.php`: modifica nominativo, cambio password, gestione/revoca sessioni, richiesta eliminazione account. Raggiungibile dal menu (“Il mio account”).

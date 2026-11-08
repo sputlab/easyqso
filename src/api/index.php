@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  EasyQSO v2.1.0 — API REST
+//  EasyQSO v2.1.1 — API REST
 // ============================================================
 $allowed = ['https://www.sputlab.com','https://sputlab.com'];
 $origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -11,6 +11,25 @@ header('Access-Control-Max-Age: 86400');
 header('Vary: Origin');
 if ($_SERVER['REQUEST_METHOD']==='OPTIONS'){http_response_code(204);exit;}
 header('Content-Type: application/json; charset=utf-8');
+
+// ── Gestione errori: mai un 500 HTML anonimo, sempre JSON + log ──
+function api_fail(string $msg): void {
+    if (!headers_sent()) { http_response_code(500); header('Content-Type: application/json; charset=utf-8'); }
+    echo json_encode(['ok'=>false,'error'=>$msg]);
+}
+set_exception_handler(function(Throwable $e){
+    error_log('[EasyQSO] '.get_class($e).': '.$e->getMessage().' @ '.$e->getFile().':'.$e->getLine());
+    // 42S02 = tabella mancante, 42S22 = colonna mancante → DB non migrato
+    $schema = $e instanceof PDOException && in_array((string)$e->getCode(),['42S02','42S22'],true);
+    api_fail($schema ? 'Database non aggiornato: esegui le migrazioni in db/.' : 'Errore interno del server.');
+});
+register_shutdown_function(function(){
+    $e = error_get_last();
+    if ($e && in_array($e['type'],[E_ERROR,E_PARSE,E_CORE_ERROR,E_COMPILE_ERROR],true)) {
+        error_log('[EasyQSO] Fatal: '.$e['message'].' @ '.$e['file'].':'.$e['line']);
+        api_fail('Errore interno del server.');
+    }
+});
 
 require_once __DIR__.'/../includes/auth.php';
 require_once __DIR__.'/../includes/rate_limit.php';
@@ -240,7 +259,7 @@ function user_export_adif(array $user):void{
     $st->execute([$user['id']]);
     header('Content-Type: text/plain; charset=utf-8');
     header('Content-Disposition: attachment; filename="easyqso_export.adi"');
-    echo "ADIF Export from EasyQSO v2.1.0\n<EOH>\n\n";
+    echo "ADIF Export from EasyQSO v2.1.1\n<EOH>\n\n";
     foreach($st->fetchAll() as $q){
         $d=str_replace('-','',$q['qso_date']);$t=str_replace(':','',substr($q['qso_time'],0,5));
         $f=$q['freq']?number_format((float)$q['freq'],3,'.',''): '';

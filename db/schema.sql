@@ -1,5 +1,5 @@
 -- ============================================================
---  EasyQSO v2.1.0 — Schema MySQL
+--  EasyQSO v2.1.1 — Schema MySQL
 --  Compatibile con MySQL 5.7+ / MariaDB 10.3+
 --  Tabelle: eqso_users, eqso_sessions, eqso_qso_log
 --  Importa con: mysql -u user -p dbname < schema.sql

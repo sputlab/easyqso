@@ -2,7 +2,7 @@
 
 Logbook web per radioamatori (PHP + MySQL, SPA integrata): log QSO, import ADIF, export Cabrillo, DX Cluster, DXCC, pannello admin, pagina di autogestione account (`account.php`: nominativo, password, sessioni, eliminazione).
 
-**Versione corrente: 2.1.0** · Licenza [MIT](LICENSE) · [Changelog](CHANGELOG.md)
+**Versione corrente: 2.1.1** · Licenza [MIT](LICENSE) · [Changelog](CHANGELOG.md)
 
 ## Prerequisiti
 - PHP 8.1+ con PDO MySQL
@@ -12,7 +12,7 @@ Logbook web per radioamatori (PHP + MySQL, SPA integrata): log QSO, import ADIF,
 ## Installazione
 
 1. **Carica** il contenuto di `src/` sul server
-2. **DB**: crea il database e importa `db/schema.sql`; se aggiorni da v2.0.1 importa `db/migration_v202.sql` (la v2.1.0 non richiede nuove migrazioni)
+2. **DB**: crea il database e importa `db/schema.sql`; se aggiorni da v2.0.1 importa `db/migration_v202.sql` (la v2.1.1 non richiede nuove migrazioni)
 3. **Config**: `cp includes/config.example.php includes/config.php` e compila i dati (generare `SECRET_KEY` con `openssl rand -hex 32`)
 4. **Nginx**: aggiungi i blocchi `location` di `docs/nginx.conf` al tuo virtual host
 5. **Apri** `https://tuodominio.com/easyqso/`
