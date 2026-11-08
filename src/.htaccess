@@ -1,0 +1,10 @@
+Options -Indexes
+RewriteEngine On
+
+# Blocca accesso diretto agli include PHP
+RewriteRule ^includes/ - [F,L]
+
+# Tutte le richieste a /api/* vanno ad api/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ api/index.php [QSA,L]
